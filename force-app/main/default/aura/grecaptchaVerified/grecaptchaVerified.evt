@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION">
+    <aura:attribute type="string" name="response"/>
+    <aura:attribute type="string" name="action"/>
+</aura:event>

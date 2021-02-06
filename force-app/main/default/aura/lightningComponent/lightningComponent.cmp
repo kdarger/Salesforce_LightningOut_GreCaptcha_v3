@@ -1,0 +1,12 @@
+<aura:component implements="flexipage:availableForAllPageTypes, forceCommunity:availableForAllPageTypes" 
+access="global" controller="LightningOutGreCaptchaExampleController">
+    <!--ReCAPTCHA Dispatch and Handler-->
+    <aura:registerEvent name="grecaptchaExecute" type="c:grecaptchaExecute"/>
+    <aura:registerEvent name="grecaptchaVerified" type="c:grecaptchaVerified"/>
+    <aura:handler name="grecaptchaVerified" event="c:grecaptchaVerified" action="{!c.grecaptchaHandler}"/>
+
+    <aura:attribute name="robotStatus" type="String" default="I don't know if you are a robot"/>
+
+    <div>{!v.robotStatus}</div>
+    <lightning:button label="See if I'm a Robot!" onclick="{!c.checkRobotStatus}"/>
+</aura:component>	

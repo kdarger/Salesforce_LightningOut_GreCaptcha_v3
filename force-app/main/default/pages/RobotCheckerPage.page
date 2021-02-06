@@ -1,0 +1,35 @@
+<apex:page showHeader="fasle" sidebar="false" title="Payment Portal" controller="GoogleReCaptchaUtilities">
+    <apex:includeLightning />
+    
+    <div id="lightning" />
+    
+    <!--load the reCaptcha v3 library-->
+    <script src='https://www.google.com/recaptcha/api.js?render={!SITE_KEY}'></script>
+
+    <script>
+    window.onload = function loadPage() {
+        $Lightning.use("c:LightningOutApp", function() {
+            $Lightning.createComponent("c:lightningComponent",
+                                       {},
+                                       "lightning",
+                                       function(cmp) {
+                                           console.log('component created');
+                                           
+                                           //listen for recaptcha execute request and pass back a token and action name from the request
+                                           $A.eventService.addHandler({ 
+                                               "event": "c:grecaptchaExecute", 
+                                               "handler" : ((executeAuraEvent) => { 
+                                                    grecaptcha.execute('{!SITE_KEY}', {action: executeAuraEvent.getParam("action")})
+                                                        .then(function(token) {
+                                                            var verifiedAuraEvent = cmp.getEvent("grecaptchaVerified");
+                                                            verifiedAuraEvent.setParams({action:executeAuraEvent.getParam("action"), response: token}); 
+                                                            verifiedAuraEvent.fire(); 
+                                                        }); 
+                                                })
+                                            });
+                                       }
+                                      );
+        });
+    }
+    </script>
+</apex:page>
